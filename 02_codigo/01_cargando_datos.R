@@ -1,6 +1,8 @@
 ### Age of empires
 
-### Código re-elaborado por Toaki Hoz Canabal de https://luisdva.github.io/rstats/aoe-PCA/
+### Código elaborado por Toaki Hoz Canabal 
+
+## Para otro tipo de análisis ver: https://luisdva.github.io/rstats/aoe-PCA/
 
 ####### ############### ################# #################### ##### 
 # 
