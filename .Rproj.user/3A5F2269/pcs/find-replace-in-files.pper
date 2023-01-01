@@ -1,0 +1,17 @@
+{
+    "dialog-state": {
+        "query": "inner",
+        "path": "~/Cursos complementarios/r_datacamp",
+        "regex": false,
+        "caseSensitive": false,
+        "wholeWord": false,
+        "filePatterns": [
+            "*.r",
+            "*.R"
+        ],
+        "excludeFilePatterns": [],
+        "resultsCount": 71,
+        "errorCount": 0,
+        "replaceErrors": ""
+    }
+}

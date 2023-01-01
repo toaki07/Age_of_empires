@@ -1,0 +1,19 @@
+{
+    "dialog-state": {
+        "query": "gghighlight",
+        "path": "C:\\Users\\BryanToaki\\Documents",
+        "regex": false,
+        "caseSensitive": false,
+        "wholeWord": false,
+        "filePatterns": [
+            "*.r",
+            "*.R"
+        ],
+        "useGitGrep": false,
+        "excludeGitIgnore": true,
+        "excludeFilePatterns": [],
+        "resultsCount": 4,
+        "errorCount": 0,
+        "replaceErrors": ""
+    }
+}

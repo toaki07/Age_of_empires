@@ -1,0 +1,120 @@
+###
+### Clase 15 - Aprendiendo a leer distribuciones univariadas
+###
+### Código elaborado por Sebastián Garrido de Sierra
+
+### Paquetes mencionados en la láminas ----
+pacman::p_load(HistData, tidyverse) #contiene bases de datos históricas HistData
+
+# HistData es un pqquete que contiene diversas bases de datos históricas y famosas. Ver más detalles: https://cran.r-project.org/web/packages/HistData/HistData.pdf
+
+### Setup ----
+Sys.setlocale("LC_ALL", "es_ES.UTF-8") # Cambiar locale para prevenir problemas con caracteres especiales
+options(scipen=999) # Prevenir notación científica
+
+
+### Bases de datos ----
+# Cargar datos ChestSize. Contiene la frecuencia del tamaño del pecho de 5,000 soldados escoseses
+data(ChestSizes) 
+
+ChestSizes %>% tibble
+
+# Convertir ChestSize en un df moderno y guardarlo en un nuevo objeto
+pechitos_frec <- as_tibble(ChestSizes) 
+
+pechitos_frec
+
+# Generar los datos a partir de los cuáles se construyó la tabla de frecuencia que está en ChestSize
+pechitos_datos <- as_tibble(rep(pechitos_frec$chest, 
+                                pechitos_frec$count))
+
+pechitos_datos
+
+
+#valores típicos: media/promedio, mediana, moda
+#valores atípicos y faltantes.
+
+  #es muy importantes aprender a leer la forma de una distribución de una variable para responder las seis preguntas; distinguir si la distribución está sesgada o no.
+
+### Medidas de tendencia central ----
+
+## Media  ----
+numeritos <- c(2, 5, 8, 4, 6)
+numeritos
+
+suma_numeritos <- sum(numeritos)
+suma_numeritos
+
+promedio_numeritos <- suma_numeritos/5
+promedio_numeritos
+
+numeritos_en_drogas <- rep(c(2, 5, 8, 4, 6), 150)
+numeritos_en_drogas
+
+length(numeritos_en_drogas)
+count(numeritos_en_drogas) # Por qué no se puede??
+
+promedio_num_en_drogas <- sum(numeritos_en_drogas)/length(numeritos_en_drogas)
+promedio_num_en_drogas
+
+mean(numeritos_en_drogas)
+
+
+## Mediana
+
+#pasos para calcularla:
+  #ordenar los valores de la variable de forma ascendente.
+  #si la variable tienen un número non de observaciones, la mediana es el valor que justo está a la mitad,
+  #si la variable tiene un número par de observaciones, la mediana se calcula promediando los dos valores de que están a la mitad.
+
+median(numeritos)
+
+numeritos2 <- c(2, 5, 8, 4, 6, 1000)
+median(numeritos2)
+
+## Moda
+  #es el valor más frecuente de una variable. Es todo lo que hay que decir de ella.
+
+  #Promedio de pechitos_datos
+promedio <- sum(pechitos_datos$value)/length(pechitos_datos$value)
+promedio
+
+promedio_redondeado <- round(sum(pechitos_datos$value)/length(pechitos_datos$value), 1)
+promedio_redondeado
+
+class(pechitos_datos)
+sum(pechitos_datos)
+median(pechitos_datos$value)
+is.na(pechitos_datos) %>% sum()
+
+pechitos_datos %>% 
+  summarise(promedio =mean(value))
+
+
+  #Mediana de pechitos_datos
+pechitos_datos %>% 
+  arrange(value) %>% 
+  print(n = Inf)
+
+median(pechitos_datos$value) #valor al medio de la distribución.
+
+  #Moda de pechitos_datos
+pechitos_datos %>% 
+  count(value, sort = T)
+
+# Recosntruir la tabla de frecuencia de Quetelet
+pechitos_datos %>% 
+  count(value)
+
+
+# Calcular el promedio 
+pechitos_datos %>% 
+  summarise(promedio = mean(value))
+
+# Calcular el promedio 
+pechitos_datos %>% 
+  ggplot() + 
+  geom_histogram(aes(value),
+                 color = "white",
+                 bins = 15) +
+  labs(x = "Pulgadas")

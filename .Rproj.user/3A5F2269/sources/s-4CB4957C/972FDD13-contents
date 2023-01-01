@@ -1,0 +1,356 @@
+###
+### Clase 5 - Tipos de datos de variables + tipos de estructuras de datos 
+###
+### Código elaborado por Sebastián Garrido de Sierra
+
+### Paquetes mencionados en la láminas ----
+# install.packages("pacman") # Solo hace falta instalarlo una vez
+library(pacman)
+
+# Esto:
+p_load(ineq, haven, readr, readxl, tidyverse)
+
++# es equivalente a esto:
+p_load(ggplot2, # Gran paquete para hacer gráficas 
+       haven,  # Cargar bd en formatos .dta, .sav, entre otros
+       ineq,    # Útil para cálculo de índice de Gini
+       readr,   # Cargar archivos de texto plano, principalmente .csv
+       readxl,  # Cargar archivos de .xls y .xlsx
+       tidyverse) # Carga de forma simultánea readr, ggplot2, dplyr, tidyr, purrr y tibble
+
+### Setup ----
+Sys.setlocale("LC_ALL", "es_ES.UTF-8") # Cambiar locale para prevenir problemas con caracteres especiales
+options(scipen=999) # Prevenir notación científica
+
+
+### Base de datos ----
+b_d <- read_csv("http://segasi.com.mx/clases/cide/vis_man/datos/bd_iesp_07_10.csv")
+
+
+### Tipos de variables ----
+
+# COMING SOON...
+
+### Tipo de estructuras de datos ----
+
+### Estructuras de bases de datos ----
+
+
+## Vectores-----
+
+# c() - Combinar datos numéricos o caracteres
+c(4, 137, 68)
+c("Quen", "Pon", "Po")
+
+# seq() - Secuencia de valores numéricos
+seq(8,      # Valor inicial 
+    436,    # Valor (máximo) final
+    16)     # Magnitud de los "brincos"
+
+# rep() - Secuencia de valores numéricos repetidos
+rep(8,     # Dato(s) a repetir
+    30)    # Núm. de veces que se debe(n) repetir
+
+# a:b - Secuencia consecutiva de valores numéricos
+a:b   
+1:6
+
+## Matrices-------
+
+# cbind() - Combinar columnas
+a <- c(34, 26, 89) # Soy un vector
+b <- c(1, 22, 18) # Soy otro vector
+matriz <-  cbind(a, b)
+
+a <- c("bajo", "medio", "alto") 
+b <- c("azul", "rojo", "blanco")
+matriz <-  cbind(a, b)
+
+# rbind() - Combinar renglones
+a <- c(34, 26, 89) # Soy un vector
+b <- c(1, 22, 18) # Soy otro vector
+matriz <-  rbind(a, b)
+
+# matrix() - Construir matrices
+matriz <- matrix(c(34, 67, 89, 1, 45, 90, 10, 34), 
+                 nrow = 2, # Número de renglones
+                 ncol = 4) # Número de columnas
+
+
+## Data frames------
+
+# data.frame() - Construir un data frame usando el paquete base 
+
+# Ej. 1 - Defniendo primero los vectores y luego integrándolos al df
+edad <- c(34, 26, 89) 
+color <- c("azul", "rojo", "blanco")
+d.f <-  data.frame(edad, color)
+
+# Ej. 2 - Defniendo los vectores dentro del data frame
+d.f <-  data.frame(edad = c(34, 26, 89), 
+                   color = c("azul", "rojo", "blanco"))
+
+# data_frame() - Construir un data frame usando el paquete base tibble
+
+d_f <-  data_frame(edad = c(34, 26, 89), 
+                   color = c("azul", "rojo", "blanco"))
+
+d_f <-  tibble(edad = c(34, 26, 89), 
+                   color = c("azul", "rojo", "blanco"))
+
+
+###
+### Funciones para analizar estructura de bd ----
+###
+
+head()    # Imprime los primeros renglones del objeto
+tail()    # Imprime los últimos renglones del objeto
+View()    # Abre el objeto entero en una nueva ventana
+nrow()     # Número de renglones
+ncol()     # Número de columnas
+dim()      # Número de renglones y columnas
+rownames() # Muestra los nombres de los renglones
+colnames() # Muestra los nombres de las columnas
+names()    # Muestra los nombres de las columnas
+str()      # Muestra la estructura del data frame (dimensiones y tipos de cada variable)
+glimpse()  #
+
+
+####Clase Tipos de variabes----
+#Tipos de variables
+  
+
+#  Numeric: son los números. En el mayor parte de los casos, R considera a los números como datos de tipo numeric
+foo <- 10.517824639927
+
+##  Para espoecificar que una variable numerica es discreta, debemos agregar una L al final
+
+yo_si_soy_un-entero <- 10L
+
+#  Character: Cuando generamos una variable que incluye texto, por default R la considera como de tipo character
+
+
+#   Factor: en ocasiones queremos que una variable que contiene texto o numeros sea tratada como una variable categórica nominal (género, clave geográfica, entidad)----
+cafecito <- c("Pequeño","mediano","alto")
+
+##   Para transformarlo
+class(cafecito)
+cafecito <- factor(cafecito)
+class(cafecito)
+
+##  En un solo paso
+cafecito <- factor(c("Pequeño","Mediano","Grande"))
+class(cafecito)              
+
+##   para conocer el numero de niveles se usa la funcion 
+nlevels(cafecito)
+
+##  para conocer el tipo de niveles que tiene un factor,se usa
+levels(cafecito)
+
+##  str () es una función que nos permite conocer las caracteristicas de la estructura  de un objeto en R
+str(cafecito)
+
+##  Los inveles no importan si se repiten varias veces las variables
+cafecito_plus <- factor(c("Pequeño","Mediano","Grande","Pequeño","Grande","Mediano"))
+levels(cafecito_plus)
+
+
+##  Para pedir ayuda se puede utilizar ?(función)
+?factor
+
+
+#   factor + order + levels(): Para especificarle a R que nuestra variable categorica ordinal, tenemos que indicalre que es un factor ordenando 
+order=TRUE
+
+cafecito_ordenado <- factor(c("Pequeño","Mediano","Grande"), 
+                            order=TRUE, 
+                            levels = c("Pequeño","Mediano","Grande"))
+cafecito_ordenado
+
+#   Levels= C("Conjunto ordenado"), funciona para ordenarle cómo quiero que los ordene
+
+min(cafecito_ordenado)
+max(cafecito_ordenado)
+
+
+cafecito_ordenado
+
+
+cafecito <- factor(c("Pequeño","Mediano","Grande"),
+                   levels = c("Pequeño","Mediano","Grande"))
+cafecito
+cafecito_ordenado
+
+
+##   variables categoricas nominales, para construirlas utilizamos factor con o sin levels
+#   variables categoricas ordinales, factor, con order= TRUE y levels()
+
+#  logical:----
+##  Estas variables solo pueden tener dos valores: TRUEo FALSE
+##  Generalmente, se generan al comparar dos variables o analizar su tipo
+
+x <- 1
+y <- 2
+z <- x > y
+z
+class(z)
+
+
+# otro ejemplo
+
+foo <- c(23,NA,NA,89,10)
+
+#   ¿Hay NA dentro del vector?-------
+#   is.na(foo)   con la instrucción anterior me da la respuesta
+
+is.na(foo)
+
+#   para hacer una negativa...
+#  !is.na(foo) para saber cual no es NA
+
+!is.na(foo)
+
+#  para preguntar si es numérico
+is.numeric(foo)
+
+##  TRUE= 1  y  FALSE=0
+
+foo <- c(90,25,78,34,10,5,1)
+
+##   ¡cuáles elementos dentro del vector cumplen una condición?
+
+foo > 30  #Esta es mi condición, y lo imprime para cada elementos
+          #¿cuales variables son mayoes a 30?
+
+sum(foo >30,  na.rm = T) #Cuántos elementos de foo son mayores a 30
+
+#si tiene NA, para utilizar sum, se utiliza sum(foo>30) na.rm=TRUE
+
+
+#  Date: ----
+##   Idealmente, las variables que contienen fechas y/o tiempo deberían cumplir cn el formato  iso8601:  yyyy-mm-dd   hh:mm:ss
+
+## Para generar una variable de tipo date:
+
+una_fecha <- ("1997-02-24")
+class(una_fecha)
+
+una_fecha_plus <- as.Date(una_fecha)
+class(una_fecha_plus)
+
+##   para calcular los días transcurridos
+Sys.Date() - una_fecha_plus
+
+# Transformaciones de tipo de datos----
+
+foo <- as.character("08")
+foo <- as.factor(foo)
+class(foo)
+foo
+foo <- as.numeric(as.character(foo)) # si no se hace de esta forma, el factor dará uno por nivel 
+class(foo)
+foo
+
+
+# Vectores----
+# Grupo o coleccion de valores almacenado como un solo objeto. Son el principal caballo de batalla.
+
+  ### c() combinar datos numpericos. Si no se guarda, solo lo imprime, su vida es efímera.
+
+sr_vector <- c(34,45,67)
+sr_vector_2 <- c("o","p","q","r","s")
+
+  ### seq() secuencia de valores numéricos
+  #seq (valor inicial, valor final, magnitud de los brincos)
+
+seq(8,436,16)
+sdf <-seq(8,436,16) 
+
+
+  ### rep() repetir
+  # rep(dato a repetir, numero de veces a repetir)
+
+rep(8,30)
+rep(c(6,7),30)
+
+  ### a:B secuencia consecutiva de valores
+
+1:16
+100:150
+
+
+
+#ejercicios 
+1:100
+quen<- seq(1,100,1)
+po <- seq(100,200,25)
+po <- rep(200,4)
+
+obj <- c(seq(1,100,1),
+         seq(100,200,25),
+         rep(200,4))
+vector <- c(quen,po,po)
+vector+1
+
+#los vectores siempre deben tener e mismo tipo de variable (character, numeric, factor, logical,etc)
+
+vector <- c("quee",3,4)
+class(vector)   #lo hace character
+vector
+
+
+vector <- c(as.factor("casa"),2,76,FALSE)
+class(vector)     #lo hace numeric
+vector
+
+#  matrices. Se crean combinando vectores del mismo tipo y de las mismas dimensiones----
+
+  # cbind()columnas y rbind()combina renglones
+
+a <- c(34,26,89)
+b <- c(1,2,3)
+
+f <- cbind(a,b)
+f
+
+g <- rbind(a,b)
+g
+f
+
+  # matrix(c(34,4,5,6, nrow=2, ncol=4))
+#  Data frame|tibbles----
+  ##puede ser integrado porvarios tipos de variables
+
+  #data.frame()    d.f()
+  #data_frame()    d_f()
+install.packages("tibble")
+  # www.tidyverse.org Se encuentran todas las familias
+
+
+edad <- c(34,26,89)
+color <- c("azul","rosa", "verde")
+d_f <- data_frame(edad,color)
+ 
+d_f
+
+as.data.frame(d_f)
+
+
+##Recuerda: para que una base de dtos sea tidy. cada variable en una columna or separado, cada renglon contenga una sola opservacion, 
+
+
+### Bases de datos----
+
+## Dos métodos para recolectar evidencias: 
+
+# estudios observacionales: encuestas, estuidos de opinion publica, analizar una cohorte.               El investigador registra datos sin intervenir en el proceso de generación de los mismos
+
+# Experimentos investigador diseña el proceso de generación de los mismos.
+
+
+#  Construcción de bases de datos----
+
+  #Bases pregargadas
+library(help=datasets)
+Formaldehyde
