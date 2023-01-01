@@ -1,6 +1,3 @@
-### para ver los cambios
-
-
 ### Age of empires
 
 ### Código re-elaborado por Toaki Hoz Canabal de https://luisdva.github.io/rstats/aoe-PCA/
