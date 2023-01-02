@@ -33,7 +33,7 @@
 
 
 
-pacman::p_load(gghighlight,ggrepel,janitor, jsonlite, readr,rvest, scico, tidyverse, tidytext,  unheadr, xml2)
+pacman::p_load(gghighlight,ggrepel, jsonlite, networkD3 ,readr,rvest, scico, tidyverse, tidytext,  unheadr, xml2)
 
 ## Para qué sirve cada paquete?
 ?gghighlight # gghiglight() highlights (almost) any geoms according to the given predicates.
@@ -100,18 +100,32 @@ pacman::p_load(gghighlight,ggrepel,janitor, jsonlite, readr,rvest, scico, tidyve
 
 wins_popularidad  %>% 
   janitor::clean_names() %>% 
-  mutate_at(.vars = c("victory_rate", "popularity"), funs(as.numeric(gsub("%","",.))))
+  mutate_at(.vars = c("victory_rate", "popularity"), 
+            funs(as.numeric(gsub("%","",.))))
 
 wins_popularidad <- wins_popularidad  %>% 
   janitor::clean_names() %>% 
-  mutate_at(.vars = c("victory_rate", "popularity"), ~as.numeric(gsub("%","",.)))
+  mutate_at(.vars = c("victory_rate", "popularity"),
+            ~as.numeric(gsub("%","",.)))
 
 
 
-# la pa´gina de los siguientes datos: https://www.unitstatistics.com/age-of-empires2/
+# la página de los siguientes datos: https://www.unitstatistics.com/age-of-empires2/
 (general_units <- read_html("https://www.unitstatistics.com/age-of-empires2/") %>% 
   html_element(css = "#tablepress-6") %>% 
   html_table())
+
+### ### ##### #### ### ### # ### ### ##### #### ### ### # ### ### ##### #### ### ### # ### ### ##### #### ### ### # 
+
+# ¿Cómo selecciono el primer elemento de cada uno, sé que s con for o con un apply ### ### ##### #### ### ### #
+names <- names(general_units) <- general_units %>% 
+  janitor::clean_names() %>%
+  names()
+
+names %>% 
+  str_split(., "_") %>% # Separamos palabras 
+  unlist()
+### ### ##### #### ### ### # ### ### ##### #### ### ### # ### ### ##### #### ### ### # ### ### ##### #### ### ### # 
 
 
 # Seleccionar antes de un patrón                    ## ----------
@@ -120,21 +134,11 @@ wins_popularidad <- wins_popularidad  %>%
 # Seleccionar antes de un delimitador                 ##
 # seleccionar antes de un delimitador                ##
 
-# ¿Cómo selecciono el primer elemento de cada uno, sé que s con for o con un apply ### ### ##### #### ### ### #
-names <- names(general_units) <- general_units %>% 
-  janitor::clean_names() %>%
-  names()
-
-names %>% 
-  str_split(., "_") %>% 
-  unlist()
-### ### ##### #### ### ### # ### ### ##### #### ### ### # ### ### ##### #### ### ### # ### ### ##### #### ### ### # 
-
 
 names(general_units) <- general_units %>% 
   janitor::clean_names() %>%
   names() %>% 
-  sub("\\_.*", "", .)  # quitar antes de un delimitar o quitar antes de un caracte # quitar antes de un delimitar o quitar antes de un caracter
+  sub("\\_.*", "", .)  # quitar antes de un delimitador o quitar antes de un caracter # quitar antes de un delimitar o quitar antes de un caracter
 
 
 
@@ -148,11 +152,15 @@ names(general_units) <- general_units %>%
 
 
 (relacion_uni_ampliado <- relacion_uni %>% 
-  unnest("unit_counters"))
+  unnest("unit_counters")) # descartamos units porque no aporta para nosotros, desanidamos por unidad debilitadora
 
+# Analizamos units desanidado
+# relacion_uni %>% 
+#   unnest("units", names_sep = "debilidad") %>% 
+#   names()
 
 (relacion_uni_ampliado <- 
-    relacion_uni_ampliado %>% 
+  relacion_uni_ampliado %>% 
   select(id, name, unit_id) %>% 
   left_join(relacion_uni, by= c("unit_id" = "id"),
             suffix = c("_unit", "_unit_weakness")) %>% 
